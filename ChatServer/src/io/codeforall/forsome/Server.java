@@ -67,7 +67,7 @@ public class Server {
     public void broadcast(String name, String message) {
         for (Worker w : listOfClients) {
             if (!w.getName().equals(name)) {
-                w.send(name + " " + message);
+                w.send("["+name+"]" + " " + message);
             }
         }
     }
@@ -76,19 +76,21 @@ public class Server {
 
         StringBuilder sb = new StringBuilder();
         for (Worker w : listOfClients) {
+            sb.append(" - ");
             sb.append(w.getName());
             sb.append("\n");
         }
         return sb.toString();
     }
-  /*  public void whisper(String name,String message){
-
-        for(Worker w: listOfClients){
-            if(w.getName().equals(name)){
-                w.send(message);
+    public void whisper(String targetName, String message) {
+        for (Worker w : listOfClients) {
+            if (w.getName().equals(targetName)) {
+                System.out.println("I got here on server.whisper");
+                return;
             }
         }
-    }*/
+        System.out.println("User '" + targetName + "' not found.");
+    }
 
     public HashMap<String, Command> buildMap() {
 

@@ -11,9 +11,6 @@ import java.util.Arrays;
 
 public class Whisper implements Command {
     private Server server;
-    private BufferedReader in;
-    private PrintWriter out;
-    private String recipient;
 
     public Whisper(Server server) {
         this.server = server;
@@ -21,9 +18,15 @@ public class Whisper implements Command {
 
     @Override
     public void init(Worker worker, String message) {
-        String[] array = message.split(" ");
-
-        //server.whisper(array[1], message);
-        System.out.println("Whispering to :" + message);
+        if (message.startsWith("/whisper")) {
+            String[] parts = message.split(" ", 3); // Split into at most 3 parts
+            if (parts.length >= 3) {
+                String target = parts[1];
+                String whisperMessage = parts[2];
+                server.whisper(target, whisperMessage);
+            } else {
+                worker.send("Invalid whisper format. Use: /whisper <target> <message>");
+            }
+        }
     }
 }
